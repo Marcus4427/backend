@@ -42,5 +42,37 @@ test("GET /id retorna 404", async () =>{
     expect(response.status).toBe(404);
     expect(response.headers["content-type"]).toMatch(/json/);
     expect(response.body['msg']).toBe("Tarefa não encontrada");
-})
+});
+
+test("PUT /id retorna 200 ", async () => {
+    const response = await request
+    .put(`${url}/${id}`)
+    .send({ name: "Estudar para P1",concluida:true});
+    expect(response.status).toBe(200);
+    expect(response.headers["content-type"]).toMatch(/json/);
+    expect(response.body.id).toBe(id);
+    expect(response.body.name).toMatch("Estudar para P1");
+    expect(response.body.concluida).toBe(true);
+});
+
+test("PUT /id retorna 404", async () =>{
+    const response = await request.put(`${url}/0`);
+    expect(response.status).toBe(404);
+    expect(response.headers["content-type"]).toMatch(/json/);
+    expect(response.body['msg']).toBe("Tarefa não encontrada");
+});
+
+test("DELETE /id retorna 204", async()=>{
+    const response = await request.delete(`${url}/${id}`);
+    expect(response.status).toBe(204);
+    expect(response.body).toStrictEqual({});
+});
+
+
+test("DELETE /id retorna 404", async () =>{
+    const response = await request.delete(`${url}/0`);
+    expect(response.status).toBe(404);
+    expect(response.headers["content-type"]).toMatch(/json/);
+    expect(response.body['msg']).toBe("Tarefa não encontrada");
+});
 });
