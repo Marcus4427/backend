@@ -1,0 +1,19 @@
+quit
+db.usuarios.find({}, {_id:0, nome: 1})
+db.usuarios.find({), {_id:0, nome: 1})
+db.usuarios.find({}), {_id:0, nome: 1}
+db.usuarios.find({}), {_id:0, nome: 1})
+db.usuarios.find({})
+db.usuarios.find({nome: "teste"})
+db.usuarios.updateOne({nome:"teste"}, { $set: {nome: "teste2"}})
+db.usuarios.updateOne({nome:"teste"}, { $set: {nome: "teste2"})
+db.usuarios.find({nome: "teste"})
+db.usuarios.find({})
+db.usuarios.insertOne({ nome: "teste", email: "teste@iesb.edu.br" })
+db.usuarios.find({})
+show collections
+db.usuarios.insertOne({ nome: "Marcus", email: "marcus.williann@iesb.edu.br" })
+show collections
+use meubanco
+use local
+show dbs
