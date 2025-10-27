@@ -45,11 +45,23 @@ function exibir(req, res){
     return res.json(req.tarefa);
 }
 
-async function atualizar(req, res){
-    const { id } = req.params;
-    const tarefaAtualizada = await Tarefa.findOneAndUpdate({_id: id},{...req.body },{ new: true });
-    return res.json(tarefaAtualizada);
-}
+async function atualizar(req, res) {
+    try {
+      const { id } = req.params;
+      const tarefaAtualizada = await Tarefa.findOneAndUpdate(
+        { _id: id },
+        { ...req.body },
+        { new: true, runValidators: true }
+      );
+      return res.json(tarefaAtualizada);
+    } catch (err) {
+      if (err.errors) {
+        return res.status(422).json({ msg: err.errors["nome"].message });
+      }
+  
+      return res.status(500).json({ msg: "Deu ruim" });
+    }
+  }
 
 async function remover(req, res){
     const { id } = req.params;
