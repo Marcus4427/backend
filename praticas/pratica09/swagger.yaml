@@ -1,0 +1,208 @@
+openapi: 3.0.0
+info:
+  title: Minha API
+  description: Projeto de uma API REST desenvolvida com Expressjs
+  version: 0.1.0
+servers:
+  - url: http://localhost:3000/
+    description: Ambiente de Desenvolvimento
+tags:
+  - produtos
+paths:
+  /produtos:
+    get:
+      summary: Lista todas tarefas
+      tags:
+        - produtos
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfProdutos'
+        500:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro500'
+    post:
+      tags:
+        - produtos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nome:
+                  type: string
+                  example: "Estudar Swagger"
+                preco:
+                  type: number
+                  example: 29.99
+      responses:
+        201:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Produto'
+        422:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro422'
+        500:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro500'
+  /produtos/{produtoId}:
+    get:
+      tags:
+        - produtos
+      parameters:
+        - in: path
+          name: produtoId
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Produto'
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro400'
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro404'
+        500:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro500'
+    put:
+      security:
+        - JWTAuth: []
+      tags:
+        - produtos
+      parameters:
+        - in: path
+          name: produtoId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nome:
+                  type: string
+                preco:
+                  type: number
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Produto'
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro400'
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro404'
+        422:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro422'
+        500:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro500'
+    delete:
+      tags:
+        - produtos
+      parameters:
+        - in: path
+          name: produtoId
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          content:
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro500'
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro404'
+        500:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro500'
+components:
+  schemas:
+    Produto:
+      type: object
+      properties:
+        id:
+          type: string
+        nome:
+          type: string
+        preco:
+          type: number
+    ArrayOfProdutos:
+      type: array
+      items:
+        $ref: '#/components/schemas/Produto'
+    Erro400:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: "Id inválido"
+    Erro404:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: "Produto não encontrado"
+    Erro422:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: "Nome e preço são obrigatórios"
+    Erro500:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: "Erro interno na API"
+  securitySchemes:
+    JWTAuth:
+      type: http
+      scheme: bearer
+      in: header
+      name: Authorization
