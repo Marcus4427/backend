@@ -1,0 +1,134 @@
+openapi: 3.0.0
+info:
+  title: Minha API REST
+  version: 0.1
+servers:
+  - url: http://localhost:3000/
+tags:
+  - name: usuarios
+paths:
+  /usuarios:
+    post:
+      tags:
+        - usuarios
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                senha:
+                  type: string
+              required:
+                - email
+                - senha
+      responses:
+        '201':
+          description: Usuario criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '422':
+          description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+    delete:
+      tags:
+        - usuarios
+      security:
+        - JWTAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                usuario:
+                  type: string
+              required:
+                - usuario
+      responses:
+        '204':
+          description: Usuario removido
+  /usuarios/login:
+    post:
+      tags:
+        - usuarios
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                usuario:
+                  type: string
+                senha:
+                  type: string
+              required:
+                - usuario
+                - senha
+      responses:
+        '200':
+          description: Login realizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        '401':
+          description: Credenciais inválidas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+  /usuarios/renovar:
+    post:
+      tags:
+        - usuarios
+      security:
+        - JWTAuth: []
+      responses:
+        '200':
+          description: Token renovado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        '401':
+          description: Token inválido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+components:
+  schemas:
+    Usuario:
+      type: object
+      properties:
+        _id:
+          type: string
+        email:
+          type: string
+    Mensagem:
+      type: object
+      properties:
+        msg:
+          type: string
+  securitySchemes:
+    JWTAuth:
+      type: apiKey
+      in: header
+      name: authorization
