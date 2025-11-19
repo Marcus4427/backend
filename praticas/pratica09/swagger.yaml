@@ -1,168 +1,119 @@
+
 openapi: 3.0.0
 info:
-  title: Minha API
-  description: Projeto de uma API REST desenvolvida com Expressjs
-  version: 0.1.0
+  title: API de Produtos
+  description: API para gerenciamento de produtos
+  version: 1.0.0
 servers:
-  - url: http://localhost:3000/
-    description: Ambiente de Desenvolvimento
+  - url: http://localhost:3000
+    description: Ambiente de desenvolvimento
 tags:
-  - produtos
+  - name: produtos
 paths:
   /produtos:
     get:
-      summary: Lista todas tarefas
       tags:
         - produtos
+      summary: Lista todos os produtos
       responses:
-        200:
+        '200':
+          description: Uma lista de produtos
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ArrayOfProdutos'
-        500:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Erro500'
     post:
       tags:
         - produtos
+      summary: Cria um novo produto
       requestBody:
+        description: Um JSON com dados do novo produto
+        required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                nome:
-                  type: string
-                  example: "Estudar Swagger"
-                preco:
-                  type: number
-                  example: 29.99
+              $ref: '#/components/schemas/Produto'
       responses:
-        201:
+        '201':
+          description: Produto criado com sucesso
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Produto'
-        422:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Erro422'
-        500:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Erro500'
+        '422':
+          description: Nome e preço são obrigatórios
   /produtos/{produtoId}:
     get:
       tags:
         - produtos
+      summary: Obtém um produto por ID
       parameters:
-        - in: path
-          name: produtoId
+        - name: produtoId
+          in: path
           required: true
           schema:
-            type: string
+            type: integer
+          description: Id do produto a ser buscado
       responses:
-        200:
+        '200':
+          description: Um JSON com os dados do produto encontrado
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Produto'
-        400:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Erro400'
-        404:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Erro404'
-        500:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Erro500'
+        '404':
+          description: Produto não encontrado
     put:
-      security:
-        - JWTAuth: []
       tags:
         - produtos
+      summary: Atualiza um produto por ID
       parameters:
-        - in: path
-          name: produtoId
+        - name: produtoId
+          in: path
           required: true
           schema:
-            type: string
+            type: integer
+          description: Id do produto a ser buscado
       requestBody:
+        description: Um JSON com dados do produto a atualizar
+        required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                nome:
-                  type: string
-                preco:
-                  type: number
+              $ref: '#/components/schemas/Produto'
       responses:
-        200:
+        '200':
+          description: Um JSON com os dados do produto atualizado
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Produto'
-        400:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Erro400'
-        404:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Erro404'
-        422:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Erro422'
-        500:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Erro500'
+        '404':
+          description: Produto não encontrado
+        '422':
+          description: Nome e preço são obrigatórios
     delete:
       tags:
         - produtos
+      summary: Deleta um produto por ID
       parameters:
-        - in: path
-          name: produtoId
+        - name: produtoId
+          in: path
           required: true
           schema:
-            type: string
+            type: integer
+          description: Id do produto a ser buscado
       responses:
-        204:
-          content:
-        400:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Erro500'
-        404:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Erro404'
-        500:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Erro500'
+        '204':
+          description: Produto removido com sucesso
+        '404':
+          description: Produto não encontrado
 components:
   schemas:
+    ArrayOfProdutos:
+      type: array
+      items:
+        $ref: '#/components/schemas/Produto'
     Produto:
       type: object
       properties:
@@ -172,37 +123,3 @@ components:
           type: string
         preco:
           type: number
-    ArrayOfProdutos:
-      type: array
-      items:
-        $ref: '#/components/schemas/Produto'
-    Erro400:
-      type: object
-      properties:
-        msg:
-          type: string
-          example: "Id inválido"
-    Erro404:
-      type: object
-      properties:
-        msg:
-          type: string
-          example: "Produto não encontrado"
-    Erro422:
-      type: object
-      properties:
-        msg:
-          type: string
-          example: "Nome e preço são obrigatórios"
-    Erro500:
-      type: object
-      properties:
-        msg:
-          type: string
-          example: "Erro interno na API"
-  securitySchemes:
-    JWTAuth:
-      type: http
-      scheme: bearer
-      in: header
-      name: Authorization
