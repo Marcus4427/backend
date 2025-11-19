@@ -1,0 +1,293 @@
+openapi: 3.0.0
+info:
+  title: API RESTful de Usuários
+  version: 1.0.0
+  description: API para gerenciamento de usuários com autenticação JWT
+servers:
+  - url: http://localhost:3000/
+tags:
+  - name: usuarios
+    description: Operações relacionadas a usuários
+paths:
+  /usuarios:
+    post:
+      tags:
+        - usuarios
+      summary: Criar novo usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: usuario@example.com
+                senha:
+                  type: string
+                  minLength: 6
+                  example: senha123
+              required:
+                - email
+                - senha
+      responses:
+        '201':
+          description: Usuário criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsuarioResponse'
+        '422':
+          description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+    get:
+      tags:
+        - usuarios
+      summary: Listar todos os usuários
+      security:
+        - JWTAuth: []
+      responses:
+        '200':
+          description: Lista de usuários
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Usuario'
+        '401':
+          description: Token inválido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+  /usuarios/{id}:
+    get:
+      tags:
+        - usuarios
+      summary: Buscar usuário por ID
+      security:
+        - JWTAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 60d5ecb74b24c72b8c8b4567
+      responses:
+        '200':
+          description: Usuário encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '404':
+          description: Usuário não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+        '422':
+          description: ID inválido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+    put:
+      tags:
+        - usuarios
+      summary: Atualizar usuário
+      security:
+        - JWTAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 60d5ecb74b24c72b8c8b4567
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: novoemail@example.com
+                senha:
+                  type: string
+                  minLength: 6
+                  example: novasenha123
+      responses:
+        '200':
+          description: Usuário atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsuarioResponse'
+        '403':
+          description: Acesso negado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+        '404':
+          description: Usuário não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+        '422':
+          description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+    delete:
+      tags:
+        - usuarios
+      summary: Remover usuário
+      security:
+        - JWTAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 60d5ecb74b24c72b8c8b4567
+      responses:
+        '204':
+          description: Usuário removido
+        '403':
+          description: Acesso negado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+        '404':
+          description: Usuário não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+  /usuarios/login:
+    post:
+      tags:
+        - usuarios
+      summary: Login de usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                usuario:
+                  type: string
+                  format: email
+                  example: usuario@example.com
+                senha:
+                  type: string
+                  example: senha123
+              required:
+                - usuario
+                - senha
+      responses:
+        '200':
+          description: Login realizado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        '401':
+          description: Credenciais inválidas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+        '422':
+          description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+  /usuarios/renovar:
+    post:
+      tags:
+        - usuarios
+      summary: Renovar token JWT
+      security:
+        - JWTAuth: []
+      responses:
+        '200':
+          description: Token renovado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        '401':
+          description: Token inválido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+components:
+  schemas:
+    Usuario:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 60d5ecb74b24c72b8c8b4567
+        email:
+          type: string
+          format: email
+          example: usuario@example.com
+        createdAt:
+          type: string
+          format: date-time
+          example: 2023-10-01T12:00:00.000Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2023-10-01T12:00:00.000Z
+    UsuarioResponse:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 60d5ecb74b24c72b8c8b4567
+        email:
+          type: string
+          format: email
+          example: usuario@example.com
+    Mensagem:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: "Erro de validação"
+  securitySchemes:
+    JWTAuth:
+      type: apiKey
+      in: header
+      name: authorization
+      description: Token JWT obtido via login
