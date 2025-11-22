@@ -187,7 +187,7 @@ api/
 │   ├── produtosRouter.js     # definição das rotas /produtos
 │   └── usuariosRouter.js     # definição das rotas /usuarios
 ├── tests/
-│   ├── produtosRouter.test.js  # testes com Jest + Supertest (produtos)
+│   ├── produtos.test.js  # testes com Jest + Supertest (produtos)
 │   └── usuariosRouter.test.js  # testes com Jest + Supertest (usuários)
 ├── app.js                    # instancia Express, configura middlewares e monta rotas
 ├── package.json              # scripts e dependências
