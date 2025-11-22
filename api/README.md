@@ -158,7 +158,7 @@ Retorna um novo token JWT válido pelo tempo configurado em `JWT_EXPIRES`.
 
 ## Divisão de Tarefas
 
-- **Marcus Williann Neres Dos Santos:
+- **Marcus Williann Neres Dos Santos**:
 - **Planejamento e Design**: Definição da arquitetura REST, entidades (usuários e produtos), autenticação JWT.
 - **Implementação**:
   - Modelos e controladores para usuários e produtos.
