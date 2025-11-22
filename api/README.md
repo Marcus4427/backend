@@ -156,14 +156,14 @@ Retorna um novo token JWT válido pelo tempo configurado em `JWT_EXPIRES`.
 
 - **Marcus Williann Neres Dos Santos 2224290017** - Desenvolvimento completo da API, incluindo autenticação, validações, testes e documentação.
 ```
-- **Planejamento e Design**: Definição da arquitetura REST, entidades (usuários e produtos), autenticação JWT.
-- **Implementação**:
+  - Planejamento e Design: Definição da arquitetura REST, entidades (usuários e produtos), autenticação JWT.
+  - Implementação:
   - Modelos e controladores para usuários e produtos.
   - Rotas com proteção JWT.
   - Validações e middlewares.
   - Documentação Swagger.
-- **Testes**: Desenvolvimento de testes unitários para todas as funcionalidades.
-- **Documentação**: README e Swagger.
+  - Testes: Desenvolvimento de testes unitários para todas as funcionalidades.
+  - Documentação: README e Swagger.
 ```
 ## Estrutura do Projeto
 
