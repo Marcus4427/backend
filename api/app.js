@@ -21,9 +21,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 const apidocsRouter = require('./routes/apidocs');
+const produtosRouter = require('./routes/produtosRouter');
 const usuariosRouter = require('./routes/usuariosRouter');
 
 app.use('/api-docs', apidocsRouter);
 app.use('/usuarios', usuariosRouter);
+app.use('/produtos', produtosRouter);
 
 module.exports = app;

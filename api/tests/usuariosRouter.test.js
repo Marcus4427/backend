@@ -1,3 +1,4 @@
+require('dotenv').config();
 const supertest = require('supertest');
 const app = require('../app');
 const mongoose = require('mongoose');
@@ -11,7 +12,7 @@ beforeAll(async () => {
   }
 });
 
-beforeEach(async () => {
+beforeAll(async () => {
   await usuariosModel.deleteMany({});
 });
 
@@ -33,13 +34,13 @@ describe('Usuarios', () => {
   it('POST /usuarios - validação: email inválido', async () => {
     const res = await request.post('/usuarios').send({ email: "invalid-email", senha: "123456" });
     expect(res.status).toBe(422);
-    expect(res.body.msg).toContain('"email" must be a valid email');
+    expect(res.body.msg).toContain('"email" deve ser um email válido');
   });
 
   it('POST /usuarios - validação: senha curta', async () => {
     const res = await request.post('/usuarios').send({ email: "test@example.com", senha: "123" });
     expect(res.status).toBe(422);
-    expect(res.body.msg).toContain('"senha" length must be at least 6 characters long');
+    expect(res.body.msg).toContain('"senha" deve ter pelo menos 6 caracteres');
   });
 
   it('POST /usuarios - email duplicado', async () => {
@@ -60,7 +61,7 @@ describe('Usuarios', () => {
   it('POST /usuarios/login - validação: email inválido', async () => {
     const res = await request.post('/usuarios/login').send({ usuario: "invalid-email", senha: "123456" });
     expect(res.status).toBe(422);
-    expect(res.body.msg).toContain('"usuario" must be a valid email');
+    expect(res.body.msg).toContain('"usuario" deve ser um email válido');
   });
 
   it('POST /usuarios/login - credenciais inválidas', async () => {
@@ -80,7 +81,7 @@ describe('Usuarios', () => {
   it('GET /usuarios - sem token', async () => {
     const res = await request.get('/usuarios');
     expect(res.status).toBe(401);
-    expect(res.body.msg).toBe("Token invalido");
+    expect(res.body.msg).toBe("Token inválido");
   });
 
   it('GET /usuarios/:id - buscar usuário por ID', async () => {
@@ -112,7 +113,7 @@ describe('Usuarios', () => {
   });
 
   it('PUT /usuarios/:id - acesso negado (usuário diferente)', async () => {
-    // Criar segundo usuário
+  
     const res2 = await request.post('/usuarios').send({ email: "user2@example.com", senha: "123456" });
     userId2 = res2.body._id;
     const loginRes = await request.post('/usuarios/login').send({ usuario: "user2@example.com", senha: "123456" });
@@ -126,7 +127,7 @@ describe('Usuarios', () => {
   it('PUT /usuarios/:id - validação: email inválido', async () => {
     const res = await request.put(`/usuarios/${userId}`).set('authorization', token).send({ email: "invalid-email" });
     expect(res.status).toBe(422);
-    expect(res.body.msg).toContain('"email" must be a valid email');
+    expect(res.body.msg).toContain('"email" deve ser um email válido');
   });
 
   it('PUT /usuarios/:id - usuário não encontrado', async () => {
@@ -146,7 +147,7 @@ describe('Usuarios', () => {
   it('POST /usuarios/renovar - token inválido', async () => {
     const res = await request.post('/usuarios/renovar').set('authorization', 'Bearer 123456789');
     expect(res.status).toBe(401);
-    expect(res.body.msg).toBe("Token invalido");
+    expect(res.body.msg).toBe("Token inválido");
   });
 
   it('DELETE /usuarios/:id - deletar usuário', async () => {
@@ -156,7 +157,7 @@ describe('Usuarios', () => {
   });
 
   it('DELETE /usuarios/:id - acesso negado', async () => {
-    // Criar e logar terceiro usuário
+
     const res3 = await request.post('/usuarios').send({ email: "user3@example.com", senha: "123456" });
     const userId3 = res3.body._id;
     const loginRes3 = await request.post('/usuarios/login').send({ usuario: "user3@example.com", senha: "123456" });

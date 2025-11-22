@@ -13,14 +13,14 @@
     "express": "~4.16.1",
     "morgan": "~1.9.1",
     "swagger-ui-express": "^5.0.1",
-    "yaml": "^2.8.1"
-  },
-  "devDependencies": {
+    "yaml": "^2.8.1",
     "bcryptjs": "^3.0.3",
     "dotenv": "^17.2.3",
-    "jest": "^30.2.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.20.0",
+    "mongoose": "^8.20.0"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0",
     "nodemon": "^3.1.11",
     "supertest": "^7.1.4"
   }

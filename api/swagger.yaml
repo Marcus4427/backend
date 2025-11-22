@@ -1,13 +1,15 @@
 openapi: 3.0.0
 info:
-  title: API RESTful de Usuários
+  title: API RESTful de Produtos
   version: 1.0.0
-  description: API para gerenciamento de usuários com autenticação JWT
+  description: API para gerenciamento de produtos com autenticação JWT
 servers:
   - url: http://localhost:3000/
 tags:
   - name: usuarios
     description: Operações relacionadas a usuários
+  - name: produtos
+    description: Operações relacionadas a produtos
 paths:
   /usuarios:
     post:
@@ -38,7 +40,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UsuarioResponse'
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: 60d5ecb74b24c72b8c8b4567
+                  email:
+                    type: string
+                    format: email
+                    example: usuario@example.com
         '422':
           description: Erro de validação
           content:
@@ -62,6 +72,73 @@ paths:
                   $ref: '#/components/schemas/Usuario'
         '401':
           description: Token inválido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+    delete:
+      tags:
+        - usuarios
+      summary: Remover usuário
+      security:
+        - JWTAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 60d5ecb74b24c72b8c8b4567
+      responses:
+        '204':
+          description: Usuário removido
+        '404':
+          description: Usuário não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+  /usuarios/login:
+    post:
+      tags:
+        - usuarios
+      summary: Login de usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                usuario:
+                  type: string
+                  format: email
+                  example: usuario@example.com
+                senha:
+                  type: string
+                  example: senha123
+              required:
+                - usuario
+                - senha
+      responses:
+        '200':
+          description: Login realizado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        '401':
+          description: Credenciais inválidas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+        '422':
+          description: Erro de validação
           content:
             application/json:
               schema:
@@ -133,88 +210,23 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UsuarioResponse'
-        '403':
-          description: Acesso negado
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Mensagem'
-        '404':
-          description: Usuário não encontrado
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Mensagem'
-        '422':
-          description: Erro de validação
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Mensagem'
-    delete:
-      tags:
-        - usuarios
-      summary: Remover usuário
-      security:
-        - JWTAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          example: 60d5ecb74b24c72b8c8b4567
-      responses:
-        '204':
-          description: Usuário removido
-        '403':
-          description: Acesso negado
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Mensagem'
-        '404':
-          description: Usuário não encontrado
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Mensagem'
-  /usuarios/login:
-    post:
-      tags:
-        - usuarios
-      summary: Login de usuário
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                usuario:
-                  type: string
-                  format: email
-                  example: usuario@example.com
-                senha:
-                  type: string
-                  example: senha123
-              required:
-                - usuario
-                - senha
-      responses:
-        '200':
-          description: Login realizado com sucesso
-          content:
-            application/json:
-              schema:
                 type: object
                 properties:
-                  token:
+                  _id:
                     type: string
-                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-        '401':
-          description: Credenciais inválidas
+                    example: 60d5ecb74b24c72b8c8b4567
+                  email:
+                    type: string
+                    format: email
+                    example: novoemail@example.com
+        '403':
+          description: Acesso negado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+        '404':
+          description: Usuário não encontrado
           content:
             application/json:
               schema:
@@ -249,8 +261,178 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Mensagem'
+  /produtos:
+    post:
+      tags:
+        - produtos
+      summary: Criar novo produto
+      security:
+        - JWTAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nome:
+                  type: string
+                  example: Produto Exemplo
+                preco:
+                  type: number
+                  format: float
+                  example: 99.99
+              required:
+                - nome
+                - preco
+      responses:
+        '201':
+          description: Produto criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Produto'
+        '422':
+          description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+    get:
+      tags:
+        - produtos
+      summary: Listar todos os produtos
+      responses:
+        '200':
+          description: Lista de produtos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Produto'
+  /produtos/{id}:
+    get:
+      tags:
+        - produtos
+      summary: Buscar produto por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 60d5ecb74b24c72b8c8b4567
+      responses:
+        '200':
+          description: Produto encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Produto'
+        '404':
+          description: Produto não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+        '422':
+          description: ID inválido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+    put:
+      tags:
+        - produtos
+      summary: Atualizar produto
+      security:
+        - JWTAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 60d5ecb74b24c72b8c8b4567
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nome:
+                  type: string
+                  example: Produto Atualizado
+                preco:
+                  type: number
+                  format: float
+                  example: 149.99
+      responses:
+        '200':
+          description: Produto atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Produto'
+        '404':
+          description: Produto não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+        '422':
+          description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
+    delete:
+      tags:
+        - produtos
+      summary: Remover produto
+      security:
+        - JWTAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 60d5ecb74b24c72b8c8b4567
+      responses:
+        '204':
+          description: Produto removido
+        '404':
+          description: Produto não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensagem'
 components:
   schemas:
+    Produto:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 60d5ecb74b24c72b8c8b4567
+        nome:
+          type: string
+          example: Produto Exemplo
+        preco:
+          type: number
+          format: float
+          example: 99.99
+        createdAt:
+          type: string
+          format: date-time
+          example: 2023-10-01T12:00:00.000Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2023-10-01T12:00:00.000Z
     Usuario:
       type: object
       properties:
@@ -269,16 +451,6 @@ components:
           type: string
           format: date-time
           example: 2023-10-01T12:00:00.000Z
-    UsuarioResponse:
-      type: object
-      properties:
-        _id:
-          type: string
-          example: 60d5ecb74b24c72b8c8b4567
-        email:
-          type: string
-          format: email
-          example: usuario@example.com
     Mensagem:
       type: object
       properties:
