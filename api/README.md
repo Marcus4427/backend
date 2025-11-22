@@ -152,13 +152,10 @@ Authorization: Bearer jwt_token_aqui
 ```
 Retorna um novo token JWT válido pelo tempo configurado em `JWT_EXPIRES`.
 
-## Integrantes do Grupo
+## Integrantes do Grupo e Divisão de Tarefas
 
 - **Marcus Williann Neres Dos Santos 2224290017** - Desenvolvimento completo da API, incluindo autenticação, validações, testes e documentação.
-
-## Divisão de Tarefas
-
-- **Marcus Williann Neres Dos Santos**:
+```
 - **Planejamento e Design**: Definição da arquitetura REST, entidades (usuários e produtos), autenticação JWT.
 - **Implementação**:
   - Modelos e controladores para usuários e produtos.
@@ -167,7 +164,7 @@ Retorna um novo token JWT válido pelo tempo configurado em `JWT_EXPIRES`.
   - Documentação Swagger.
 - **Testes**: Desenvolvimento de testes unitários para todas as funcionalidades.
 - **Documentação**: README e Swagger.
-
+```
 ## Estrutura do Projeto
 
 ```
