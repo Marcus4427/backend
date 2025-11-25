@@ -2,84 +2,91 @@
 
 **Desenvolvido por: Marcus Williann Neres Dos Santos 2224290017**
 
-API RESTful desenvolvida com Node.js e Express para gerenciamento de produtos e usuários.
-Implementa autenticação JWT obrigatória para operações de escrita, validações de dados, testes automatizados com Jest/Supertest e documentação interativa com Swagger/OpenAPI.
+API RESTful desenvolvida com Node.js e Express para gerenciamento de produtos e usuários. Implementa autenticação JWT obrigatória para operações de escrita, validações de dados, testes automatizados com Jest/Supertest e documentação interativa com Swagger/OpenAPI.
 
 ## Funcionalidades
 
-- **CRUD de Produtos**: Criar, listar, buscar, atualizar e remover produtos.
-- **CRUD de Usuários**: Criar, listar, buscar, atualizar, remover usuários e login.
-- **Autenticação JWT**: Protege rotas de escrita (criar, atualizar, deletar produtos e usuários).
-- **Validações**: Dados obrigatórios, tipos e regras de negócio.
-- **Banco de Dados**: MongoDB.
-- **Documentação**: Swagger/OpenAPI.
-- **Testes**: Unitários com Jest e Supertest.
+-   **CRUD de Produtos**: Criar, listar, buscar, atualizar e remover produtos.
+    
+-   **CRUD de Usuários**: Criar, listar, buscar, atualizar, remover usuários e login.
+    
+-   **Autenticação JWT**: Protege rotas de escrita (criar, atualizar, deletar produtos e usuários).
+    
+-   **Validações**: Dados obrigatórios, tipos e regras de negócio.
+    
+-   **Banco de Dados**: MongoDB.
+    
+-   **Documentação**: Swagger/OpenAPI.
+    
+-   **Testes**: Unitários com Jest e Supertest.
+    
 
 ## Tecnologias Utilizadas
 
-- **Backend**: Node.js, Express.js
-- **Banco**: MongoDB (Mongoose)
-- **Autenticação**: JWT (jsonwebtoken), bcryptjs
-- **Testes**: Jest, Supertest
-- **Documentação**: Swagger UI Express, YAML
-- **Outros**: Morgan (logs), Cookie Parser, Dotenv
+-   **Backend**: Node.js, Express.js
+    
+-   **Banco**: MongoDB (Mongoose)
+    
+-   **Autenticação**: JWT (jsonwebtoken), bcryptjs
+    
+-   **Testes**: Jest, Supertest
+    
+-   **Documentação**: Swagger UI Express, YAML
+    
+-   **Outros**: Morgan (logs), Cookie Parser, Dotenv
+    
 
 ## Configuração
 
-1. **Clone o repositório**:
-   ```
-   git clone <url-do-repositorio>
-   cd api
-   ```
-
-2. **Instale as dependências**:
-   ```
-   npm install
-   ```
-
-3. **Configure o ambiente**:
-   - Crie um arquivo `.env` na raiz com as variáveis:
-     ```
-     MONGODB_USER=seu_usuario_mongodb
-     MONGODB_PASSWORD=sua_senha_mongodb
-     MONGODB_HOST=seu_host_mongodb
-     MONGODB_DATABASE=seu_banco_mongodb
-     JWT_SECRET=sua_chave_secreta_jwt
-     JWT_EXPIRES=3600 # tempo de expiração do token em segundos (opcional, default 3600)
+1.  **Clone o repositório**: `git clone <url-do-repositorio> cd api`
     
-     ```
-
-4. **Inicie o MongoDB** (local ou Atlas).
+2.  **Instale as dependências**: `npm install`
+    
+3.  **Configure o ambiente**: - Crie um arquivo `.env` na raiz com as variáveis: `MONGODB_USER=seu_usuario_mongodb MONGODB_PASSWORD=sua_senha_mongodb MONGODB_HOST=seu_host_mongodb MONGODB_DATABASE=seu_banco_mongodb JWT_SECRET=sua_chave_secreta_jwt JWT_EXPIRES=3600 # tempo de expiração do token em segundos (opcional, default 3600)`
+    
+4.  **Inicie o MongoDB** (local ou Atlas).
+    
 
 ## Execução
 
-- **Desenvolvimento**:
-  ```
-  npm run dev
-  ```
-  - Servidor roda em `http://localhost:3000`
-  - Documentação Swagger em `http://localhost:3000/api-docs`
-
-- **Produção**:
-  ```
-  npm start
-  ```
+-   **Desenvolvimento**: `npm run dev` - Servidor roda em `http://localhost:3000` - Documentação Swagger em `http://localhost:3000/api-docs`
+    
+-   **Produção**: `npm start`
+    
 
 ## Como Rodar os Testes
 
 ```
 npm test
+
 ```
 
 Os testes cobrem:
-- Rotas de produtos (CRUD, validações, autenticação)
-- Rotas de usuários (CRUD, validações, autenticação)
-- Controladores
-- Modelos
+
+-   Rotas de produtos (CRUD, validações, autenticação)
+    
+-   Rotas de usuários (CRUD, validações, autenticação)
+    
+-   Controladores
+    
+-   Modelos
+    
+
+**Status:** Todos os testes passaram com sucesso no ambiente de desenvolvimento local.
+
+## Documentação Interativa
+
+A documentação completa dos _endpoints_ da API (rotas, métodos, parâmetros, _request/response_ de exemplo e códigos HTTP esperados) foi gerada com **Swagger/OpenAPI**.
+
+-   **Acesso Interativo:** Após iniciar o servidor com `npm run dev`, acesse:
+    
+    > **http://localhost:3000/api-docs**
+    
 
 ## Exemplos de Uso
 
 ### 1. Criar Usuário (para obter token)
+
 ```
 POST /usuarios
 Content-Type: application/json
@@ -88,9 +95,11 @@ Content-Type: application/json
   "email": "usuario@example.com",
   "senha": "123456"
 }
+
 ```
 
 ### 2. Login (obter token)
+
 ```
 POST /usuarios/login
 Content-Type: application/json
@@ -99,7 +108,9 @@ Content-Type: application/json
   "usuario": "usuario@example.com",
   "senha": "123456"
 }
+
 ```
+
 Resposta: `{ "token": "jwt_token_aqui" }`
 
 Observação: o token deve ser enviado nas rotas protegidas no header `Authorization` usando o esquema Bearer, por exemplo:
@@ -107,6 +118,7 @@ Observação: o token deve ser enviado nas rotas protegidas no header `Authoriza
 Authorization: Bearer jwt_token_aqui
 
 ### 3. Criar Produto (requer token)
+
 ```
 POST /produtos
 Authorization: Bearer jwt_token_aqui
@@ -116,19 +128,25 @@ Content-Type: application/json
   "nome": "Produto Exemplo",
   "preco": 29.99
 }
+
 ```
 
 ### 4. Listar Produtos
+
 ```
 GET /produtos
+
 ```
 
 ### 5. Buscar Produto por ID
+
 ```
 GET /produtos/{id}
+
 ```
 
 ### 6. Atualizar Produto (requer token)
+
 ```
 PUT /produtos/{id}
 Authorization: Bearer jwt_token_aqui
@@ -138,24 +156,38 @@ Content-Type: application/json
   "nome": "Produto Atualizado",
   "preco": 39.99
 }
+
 ```
 
 ### 7. Deletar Produto (requer token)
+
 ```
 DELETE /produtos/{id}
 Authorization: Bearer jwt_token_aqui
+
 ```
 
 ### 8. Renovar Token
+
 ```
 POST /usuarios/renovar
 Authorization: Bearer jwt_token_aqui
+
 ```
+
 Retorna um novo token JWT válido pelo tempo configurado em `JWT_EXPIRES`.
+
+## Histórico de Issues
+
+O histórico de problemas e tarefas concluídas (issues fechadas) pode ser consultado diretamente no GitHub:
+
+> [Issues Fechadas do Repositório](https://github.com/Marcus4427/backend/issues?q=is%3Aissue%20state%3Aclosed "null")
 
 ## Integrantes do Grupo e Divisão de Tarefas
 
-- **Marcus Williann Neres Dos Santos 2224290017** - Desenvolvimento completo da API, incluindo autenticação, validações, testes e documentação.
+-   **Marcus Williann Neres Dos Santos 2224290017** - Desenvolvimento completo da API, incluindo autenticação, validações, testes e documentação.
+    
+
 ```
   - Planejamento e Design:
       Definição da arquitetura REST, entidades (usuários e produtos), autenticação JWT.
@@ -168,7 +200,9 @@ Retorna um novo token JWT válido pelo tempo configurado em `JWT_EXPIRES`.
       Desenvolvimento de testes unitários para todas as funcionalidades.
   - Documentação:
        README e Swagger.
+
 ```
+
 ## Estrutura do Projeto
 
 ```
@@ -193,11 +227,7 @@ api/
 ├── app.js                    # instancia Express, configura middlewares e monta rotas
 ├── package.json              # scripts e dependências
 ├── swagger.yaml              # documentação OpenAPI usada pelo Swagger UI
+├── .gitignore               # lista de arquivos ignorados pelo Git
 └── README.md                 # documentação da API
+
 ```
-
-## Notas
-
-- As rotas de leitura de produtos (GET) são públicas.
-- Operações de escrita (POST, PUT, DELETE) requerem token JWT válido.
-- Use o Swagger para testar interativamente os endpoints.
