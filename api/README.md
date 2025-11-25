@@ -2,7 +2,8 @@
 
 **Desenvolvido por: Marcus Williann Neres Dos Santos 2224290017**
 
-Esta é uma API RESTful desenvolvida com Express.js para gerenciamento de produtos e usuários, incluindo autenticação JWT obrigatória para operações de escrita.
+API RESTful desenvolvida com Node.js e Express para gerenciamento de produtos e usuários.
+Implementa autenticação JWT obrigatória para operações de escrita, validações de dados, testes automatizados com Jest/Supertest e documentação interativa com Swagger/OpenAPI.
 
 ## Funcionalidades
 
